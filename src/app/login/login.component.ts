@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { LoginService } from './login.service';
 
 @Component({
   selector: 'app-login',
@@ -10,12 +11,11 @@ export class LoginComponent {
 
   hidePassword: boolean = true;
 
-  formGroup: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required])
-  });
+  loginForm: FormGroup;
 
-  constructor() { }
+  constructor(private readonly loginService: LoginService) {
+    this.loginForm = loginService.getLoginFormGroup();
+  }
 
   getOneTimeToken() {
     let currentDate = new Date().toISOString();
@@ -25,29 +25,33 @@ export class LoginComponent {
     return oneTimeCode;
   }
 
-  submit() {
+  async submit() {
     // i like using formGroups over individual formControls
     // as you get functionality like this where if any control
-    // is invalid the form itself is invalid..Angular 10+ has
+    // is invalid the form itself is invalid..Angular 10+
     // has apparently made formGroups finicky as it messes with
     // TS strictTemplates but there are workarounds
     // new the control and referencing it in the group or As in getter?
-    if (this.formGroup.invalid) return;
-    const oneTimeToken = this.getOneTimeToken();
-    // need submission logic
+    if (this.loginForm.invalid) return;
+    await this.loginService.submitLogin(this.loginForm.value);
   }
 
   get emailControl() {
-    return this.formGroup.get('email');
+    return this.loginForm.get('email');
   }
 
   get emailControlErrorText() {
     if (this.emailControl?.hasError('email')) return 'Invalid email address!'
-    return 'A email address is required!'
+    return 'An email address is required!'
+  }
+
+  get passwordControlErrorText() {
+    if (this.passwordControl?.hasError('required')) return 'A password is required!';
+    return 'Invalid characters! ANSI accessible only';
   }
 
   get passwordControl() {
-    return this.formGroup.get('password');
+    return this.loginForm.get('password');
   }
 
 }

@@ -1,5 +1,5 @@
 <div class="input-container">
-  <form class="input-form" [formGroup]="formGroup">
+  <form class="input-form" [formGroup]="loginForm">
     <mat-form-field>
       <mat-label>Email</mat-label>
       <input
@@ -18,6 +18,7 @@
         required
       >
       <button
+       id="conceal-password-button"
        mat-icon-button
        matSuffix
        (click)="hidePassword = !hidePassword"
@@ -27,11 +28,12 @@
       >
         <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
       </button>
-      <mat-error *ngIf="passwordControl?.invalid">A password is required!</mat-error>
+      <mat-error *ngIf="passwordControl?.invalid">{{passwordControlErrorText}}</mat-error>
     </mat-form-field>
     <button
       class="submit-button"
       mat-raised-button
+      [attr.aria-label]="'Submit Login'"
       (click)="submit()"
     >Login</button>
   </form>
