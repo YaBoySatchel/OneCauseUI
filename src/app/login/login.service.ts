@@ -11,10 +11,13 @@ export class LoginService {
   constructor(private readonly fb: FormBuilder) { }
 
   getOneTimeToken(currentDate: Date): number {
-    const currentDateISO = currentDate.toISOString();
-    const currentISOTime = currentDateISO.split('T')[1];
-    const currentISOTimeSplit = currentISOTime.split(':');
-    const oneTimeCode = currentISOTimeSplit[0] + currentISOTimeSplit[1];
+    const currentDateUTC = currentDate.toUTCString();
+    const currentUTCTime = currentDateUTC.split(' ')[4];
+    const currentUTCTimeSplit = currentUTCTime.split(':');
+    // parsing int here to remove leading 0s
+    const UTCHour = parseInt(currentUTCTimeSplit[0]);
+    const UTCMinute = parseInt(currentUTCTimeSplit[1]);
+    const oneTimeCode = `${UTCHour}${UTCMinute}`
     return parseInt(oneTimeCode);
   }
 
@@ -22,7 +25,7 @@ export class LoginService {
     const currentDate = new Date();
     const oneTimeCode = this.getOneTimeToken(currentDate);
 
-    const fetchResponse = await fetch(environment.API_URL, {
+    const fetchResponse = await fetch(`${environment.API_URL}/login`, {
       method: 'post',
       body: JSON.stringify({
         oneTimeCode,
