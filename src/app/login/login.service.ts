@@ -21,7 +21,7 @@ export class LoginService {
     return parseInt(oneTimeCode);
   }
 
-  async submitLogin(loginInfo: LoginInfo) {
+  async submitLogin(loginInfo: LoginInfo): Promise<Response> {
     const currentDate = new Date();
     const oneTimeCode = this.getOneTimeToken(currentDate);
 
@@ -32,13 +32,7 @@ export class LoginService {
         ...loginInfo
       })
     });
-
-    if (!fetchResponse.ok) {
-      // Typically reroute to error page
-      console.log(fetchResponse.status);
-    } else {
-      window.location.href = 'http://onecause.com/'
-    }
+    return fetchResponse;
   }
 
   getLoginFormGroup() {

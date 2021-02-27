@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -19,7 +20,8 @@ describe('LoginComponent', () => {
         MatInputModule,
         ReactiveFormsModule,
         MatButtonModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        RouterTestingModule
       ]
     })
     .compileComponents();

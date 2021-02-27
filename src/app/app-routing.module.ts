@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
+import { ErrorComponent } from './error/error.component';
 
 
 // included routing as iterations continue and
@@ -10,7 +11,8 @@ import { LoginComponent } from './login/login.component';
 // is present in session storage or wherever
 // else route to the login component
 const routes: Routes = [
-  { path: '', component: LoginComponent}
+  { path: '', component: LoginComponent},
+  { path: 'error', component: ErrorComponent}
 ];
 
 @NgModule({

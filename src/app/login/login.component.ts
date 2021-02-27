@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { LoginService } from './login.service';
 
 @Component({
@@ -13,7 +14,10 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
-  constructor(private readonly loginService: LoginService) {
+  constructor(
+    private readonly loginService: LoginService,
+    private readonly router: Router
+  ) {
     this.loginForm = loginService.getLoginFormGroup();
   }
 
@@ -33,7 +37,15 @@ export class LoginComponent {
     // TS strictTemplates but there are workarounds
     // new the control and referencing it in the group or As in getter?
     if (this.loginForm.invalid) return;
-    await this.loginService.submitLogin(this.loginForm.value);
+    const response = await this.loginService.submitLogin(this.loginForm.value);
+    if (!response.ok) {
+      // Could do a modal here but typically avoid modals
+      // as theyre not great for accessibility so
+      // i just newed up another component
+      this.router.navigateByUrl('/error')
+    } else {
+      window.location.href = 'http://onecause.com/'
+    }
   }
 
   get emailControl() {

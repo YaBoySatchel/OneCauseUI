@@ -46,4 +46,16 @@ describe('LoginService', () => {
     expect(emailControl?.valid).toBe(false);
     expect(passwordControl?.valid).toBe(false);
   });
+
+  it('should correctly validate password regex', () => {
+    let passwordControl = loginForm.get('password');
+    passwordControl?.patchValue('~`!@#$%^&*()_-+=}]{["\':;?/>.<,')
+    expect(passwordControl?.valid).toBe(true);
+  });
+
+  it('should correctly invalidate password regex', () => {
+    let passwordControl = loginForm.get('password');
+    passwordControl?.patchValue('©')
+    expect(passwordControl?.valid).toBe(false);
+  });
 });
